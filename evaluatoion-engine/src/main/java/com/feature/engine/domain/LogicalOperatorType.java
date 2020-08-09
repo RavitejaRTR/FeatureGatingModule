@@ -16,7 +16,7 @@ public enum LogicalOperatorType {
         return name;
     }
 
-    public LogicalOperatorType getLogicalOperatorByName(String name) {
+    public static LogicalOperatorType getLogicalOperatorByName(String name) {
         for (LogicalOperatorType logicalOperatorType:LogicalOperatorType.values()) {
             if (logicalOperatorType.getName().equals(name))
                 return logicalOperatorType;

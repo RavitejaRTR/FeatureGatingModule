@@ -25,7 +25,7 @@ public enum OperatorType {
         return name;
     }
 
-    public OperatorType getOperatorTypeByName(String name) {
+    public static OperatorType getOperatorTypeByName(String name) {
         for (OperatorType operatorType : OperatorType.values()) {
             if (operatorType.getName().equals(name))
                 return operatorType;
