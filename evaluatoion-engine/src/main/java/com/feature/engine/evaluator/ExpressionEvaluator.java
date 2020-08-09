@@ -10,7 +10,7 @@ import java.util.Map;
 @Component
 public class ExpressionEvaluator {
 
-    private static final Logger logger = LoggerFactory.getLogger(ExpressionEvaluator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExpressionEvaluator.class);
 
     @Inject
     private BaseOperatorsBasedEvaluator baseOperatorsBasedEvaluator;
@@ -19,7 +19,7 @@ public class ExpressionEvaluator {
     private LogicalOperatorsBasedEvaluator logicalOperatorsBasedEvaluator;
 
     public boolean isAllowed(String condition, String featureName, Map<String, Object> userAttributes) {
-        logger.info("Evaluating condition : {}", condition);
+        LOGGER.info("Evaluating condition : {}", condition);
         String baseOperatorSolvedCondition = baseOperatorsBasedEvaluator.evaluate(condition, userAttributes);
         System.out.println(baseOperatorSolvedCondition);
         return false;

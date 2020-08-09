@@ -3,6 +3,8 @@ package com.feature.engine.evaluator;
 import com.feature.engine.domain.Condition;
 import com.feature.engine.domain.LogicalOperatorType;
 import com.feature.engine.domain.OperatorType;
+import com.feature.engine.strategy.baseoperator.BaseOperatorEvaluationStrategy;
+import com.feature.engine.strategy.baseoperator.factory.BaseOperatorStrategyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -12,11 +14,11 @@ import java.util.Map;
 @Component
 public class BaseOperatorsBasedEvaluator {
 
-    private static final Logger logger = LoggerFactory.getLogger(BaseOperatorsBasedEvaluator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BaseOperatorsBasedEvaluator.class);
 
     // TODO :: Handle exception when passed String is not a properly formed condition
     public String evaluate(String condition, Map<String, Object> userAttributes) {
-        logger.info("Evaluating condition based on BaseOperators....");
+        LOGGER.info("Evaluating condition based on BaseOperators....");
 
         StringBuilder resultBuilder = new StringBuilder();
         String[] conditionSplitBySpace = condition.split(" ");
@@ -41,10 +43,9 @@ public class BaseOperatorsBasedEvaluator {
     }
 
     public boolean evaluate(Condition condition) {
-        logger.info("Evaluating condition : {}", condition);
-
-
-        return true;
+        LOGGER.info("Evaluating condition : {}", condition);
+        BaseOperatorEvaluationStrategy evaluationStrategy = BaseOperatorStrategyFactory.getBaseOperatorEvaluationStrategy(condition.getOperatorType());
+        return evaluationStrategy.evaluate(condition);
     }
 
 }
