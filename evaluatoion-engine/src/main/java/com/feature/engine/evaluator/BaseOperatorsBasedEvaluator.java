@@ -5,6 +5,8 @@ import com.feature.engine.domain.LogicalOperatorType;
 import com.feature.engine.domain.OperatorType;
 import com.feature.engine.strategy.baseoperator.BaseOperatorEvaluationStrategy;
 import com.feature.engine.strategy.baseoperator.factory.BaseOperatorStrategyFactory;
+import com.feature.engine.strategy.keyparser.KeyParserStrategy;
+import com.feature.engine.strategy.keyparser.factory.KeyParserStrategyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -25,7 +27,7 @@ public class BaseOperatorsBasedEvaluator {
         for (int i = 0; i < conditionSplitBySpace.length; i++) {
             if (LogicalOperatorType.getLogicalOperatorByName(conditionSplitBySpace[i]).equals(LogicalOperatorType.UNKNOWN)) {
                 Condition cond = new Condition();
-                cond.setKey(conditionSplitBySpace[i]);
+                cond.setKey(getKey(conditionSplitBySpace[i], userAttributes));
                 cond.setOperatorType(OperatorType.getOperatorTypeByName(conditionSplitBySpace[i + 1]));
                 cond.setValue(conditionSplitBySpace[i + 2]);
 
@@ -46,6 +48,11 @@ public class BaseOperatorsBasedEvaluator {
         LOGGER.info("Evaluating condition : {}", condition);
         BaseOperatorEvaluationStrategy evaluationStrategy = BaseOperatorStrategyFactory.getBaseOperatorEvaluationStrategy(condition.getOperatorType());
         return evaluationStrategy.evaluate(condition);
+    }
+
+    private String getKey(String key, Map<String, Object> userAttributes){
+        KeyParserStrategy keyParser = KeyParserStrategyFactory.getKeyParser(key);
+        return keyParser.parseKey(key, userAttributes);
     }
 
 }
