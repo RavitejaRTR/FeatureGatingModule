@@ -11,6 +11,6 @@ public class EqualsOperatorStrategy implements BaseOperatorEvaluationStrategy {
     @Override
     public boolean evaluate(Condition condition) {
         LOGGER.info("Executing equalsEvaluationStrategy.");
-        return false;
+        return condition.getKey().equals(condition.getValue());
     }
 }

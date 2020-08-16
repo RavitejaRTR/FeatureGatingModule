@@ -6,6 +6,6 @@ import java.util.Map;
 
 public interface KeyParserStrategy {
 
-    String parseKey(String key, Map<String, Object> userAttributes);
+    Object parseKey(String key, Map<String, Object> userAttributes);
 
 }

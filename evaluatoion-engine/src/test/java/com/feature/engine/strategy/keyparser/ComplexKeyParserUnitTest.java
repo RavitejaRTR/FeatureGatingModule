@@ -19,7 +19,7 @@ public class ComplexKeyParserUnitTest {
 
     @Test
     public void testParseKey() throws NoSuchFieldException {
-        Assert.assertEquals("10", complexKeyParser.parseKey("address.subGroup.num", getUserAttributes()));
+        Assert.assertEquals(10, complexKeyParser.parseKey("address.subGroup.num", getUserAttributes()));
     }
 
     private Map<String, Object> getUserAttributes() {

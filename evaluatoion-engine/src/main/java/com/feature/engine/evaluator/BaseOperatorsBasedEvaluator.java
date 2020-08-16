@@ -7,6 +7,8 @@ import com.feature.engine.strategy.baseoperator.BaseOperatorEvaluationStrategy;
 import com.feature.engine.strategy.baseoperator.factory.BaseOperatorStrategyFactory;
 import com.feature.engine.strategy.keyparser.KeyParserStrategy;
 import com.feature.engine.strategy.keyparser.factory.KeyParserStrategyFactory;
+import com.feature.engine.strategy.valueparser.ValueParserStrategy;
+import com.feature.engine.strategy.valueparser.factory.ValueParserStrategyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -23,18 +25,32 @@ public class BaseOperatorsBasedEvaluator {
         LOGGER.info("Evaluating condition based on BaseOperators....");
 
         StringBuilder resultBuilder = new StringBuilder();
-        String[] conditionSplitBySpace = condition.split(" ");
+        String[] conditionSplitBySpace = condition.split("[ ]");
         for (int i = 0; i < conditionSplitBySpace.length; i++) {
             if (LogicalOperatorType.getLogicalOperatorByName(conditionSplitBySpace[i]).equals(LogicalOperatorType.UNKNOWN)) {
                 Condition cond = new Condition();
                 cond.setKey(getKey(conditionSplitBySpace[i], userAttributes));
                 cond.setOperatorType(OperatorType.getOperatorTypeByName(conditionSplitBySpace[i + 1]));
-                cond.setValue(conditionSplitBySpace[i + 2]);
+                cond.setValue(getValue(conditionSplitBySpace[i + 2]));
 
+                LOGGER.info("Invoking evaluator for condition : {}", cond);
+                System.out.println(cond.toString());
                 boolean result = evaluate(cond);
-                resultBuilder.append(cond.getKey().startsWith("(") ? " (" : " ")
-                        .append(result ? "true" : "false")
-                        .append(cond.getValue().endsWith(")") ? ")" : "");
+                //Add the beginning and ending parenthesis back to resultant string
+                resultBuilder.append(resultBuilder.toString().isEmpty() ? "" : " ");
+                for (char c : conditionSplitBySpace[i].toCharArray()) {
+                    if(c == '(')
+                        resultBuilder.append("(");
+                    else
+                        break;
+                }
+                resultBuilder.append(result ? "true" : "false");
+                for (int j = conditionSplitBySpace[i + 2].toCharArray().length-1; j>=0; j--) {
+                    if(conditionSplitBySpace[i + 2].toCharArray()[j] == ')')
+                        resultBuilder.append(")");
+                    else
+                        break;
+                }
                 i += 2;
             } else {
                 resultBuilder.append(" ")
@@ -50,9 +66,18 @@ public class BaseOperatorsBasedEvaluator {
         return evaluationStrategy.evaluate(condition);
     }
 
-    private String getKey(String key, Map<String, Object> userAttributes){
+    private Object getKey(String key, Map<String, Object> userAttributes) {
+        while (key.startsWith("("))
+            key = key.replace("(", "");
         KeyParserStrategy keyParser = KeyParserStrategyFactory.getKeyParser(key);
         return keyParser.parseKey(key, userAttributes);
+    }
+
+    private Object getValue(String value) {
+        while (value.endsWith(")"))
+            value = value.replace(")", "");
+        ValueParserStrategy valueParser = ValueParserStrategyFactory.getValueParser(value);
+        return valueParser.parseValue(value);
     }
 
 }
