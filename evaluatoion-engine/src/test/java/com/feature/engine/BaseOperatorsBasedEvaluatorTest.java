@@ -17,13 +17,14 @@ public class BaseOperatorsBasedEvaluatorTest {
 
     @Test
     public void testEvaluate() {
-        String actualParsedCond = baseOperatorsBasedEvaluator.evaluate("age == 25", getUserAttributes());
-        Assert.assertEquals("true", actualParsedCond);
+        String actualParsedCond = baseOperatorsBasedEvaluator.evaluate("(gender != \"MALE\") AND age == 25", getUserAttributes());
+        Assert.assertEquals("(true) AND true", actualParsedCond);
     }
 
     private Map<String, Object> getUserAttributes() {
         Map<String, Object> userAttributes = new HashMap<>();
         userAttributes.put("age", 25);
+        userAttributes.put("gender", "FEMALE");
         return userAttributes;
     }
 

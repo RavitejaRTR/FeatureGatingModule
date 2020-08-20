@@ -1,8 +1,7 @@
 package com.feature.engine.strategy.baseoperator.factory;
 
 import com.feature.engine.domain.OperatorType;
-import com.feature.engine.strategy.baseoperator.BaseOperatorEvaluationStrategy;
-import com.feature.engine.strategy.baseoperator.EqualsOperatorStrategy;
+import com.feature.engine.strategy.baseoperator.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +13,14 @@ public class BaseOperatorStrategyFactory {
     static {
         EVALUATION_STRATEGY_MAP = new HashMap<>();
         EVALUATION_STRATEGY_MAP.put(OperatorType.EQUALS, new EqualsOperatorStrategy());
+        EVALUATION_STRATEGY_MAP.put(OperatorType.ALLOF, new AllOfOperatorStrategy());
+        EVALUATION_STRATEGY_MAP.put(OperatorType.BETWEEN, new BetweenOperatorStrategy());
+        EVALUATION_STRATEGY_MAP.put(OperatorType.GREATER_THAN, new GreaterThanOperatorStrategy());
+        EVALUATION_STRATEGY_MAP.put(OperatorType.GREATER_THAN_OR_EQUALS, new GreaterThanOrEqualsOperatorStrategy());
+        EVALUATION_STRATEGY_MAP.put(OperatorType.LESS_THAN, new LessThanOperatorStrategy());
+        EVALUATION_STRATEGY_MAP.put(OperatorType.LESS_THAN_OR_EQUALS, new LessThanOrEqualsOperatorStrategy());
+        EVALUATION_STRATEGY_MAP.put(OperatorType.NONEOF, new NoneOfOperatorStrategy());
+        EVALUATION_STRATEGY_MAP.put(OperatorType.NOT_EQUALS, new NotEqualsOperatorStrategy());
     }
 
     public static BaseOperatorEvaluationStrategy getBaseOperatorEvaluationStrategy(OperatorType operatorType) {

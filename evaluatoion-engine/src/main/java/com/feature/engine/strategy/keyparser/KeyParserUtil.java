@@ -6,8 +6,8 @@ public class KeyParserUtil {
         try {
             return Integer.valueOf(keyValueFromMap.toString());
         } catch (NumberFormatException e) {
-            return Boolean.valueOf(keyValueFromMap.toString());
-        } catch (Exception e) {
+            if(keyValueFromMap.equals("true") || keyValueFromMap.equals("false"))
+                return Boolean.valueOf(keyValueFromMap.toString());
             return keyValueFromMap.toString();
         }
     }
